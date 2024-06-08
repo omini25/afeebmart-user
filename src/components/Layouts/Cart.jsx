@@ -5,7 +5,7 @@ import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {addToCart, loadCart, removeFromCart} from "../../redux/actions/cartActions.js";
+import {addToCart, decreaseQuantity, loadCart, removeFromCart} from "../../redux/actions/cartActions.js";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,13 +20,16 @@ export const Cart = ({setOpenCart}) => {
 
     const totalPrice = Array.isArray(cart) ? cart.reduce(
         (acc, item) => {
-            console.log(`Item: ${JSON.stringify(item)}`);
-            console.log(`Quantity: ${item.qty}`);
-            console.log(`Price: ${item.price}`);
-            return acc + (typeof item.qty === 'number' && typeof item.price === 'number' ? item.qty * item.price : 0);
+            const qty = Number(item.qty);
+            const price = Number(item.price);
+            if (isNaN(qty) || isNaN(price)) {
+                console.error(`Invalid quantity or price for item: ${item}`);
+                return acc;
+            }
+            return acc + qty * price;
         },
         0
-    ) : 0;
+    ).toFixed(2) : '0.00';
 
 
 
@@ -100,9 +103,12 @@ export const Cart = ({setOpenCart}) => {
 
                         <div className="px-5 mb-3">
                             {/* checkout buttons */}
-                            <Link to="/checkout">
+                            <Link to={{
+                                pathname: "/checkout",
+                                state: { cartDetails: cart }
+                            }}>
                                 <div
-                                    className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
+                                    className={`h-[45px] flex items-center justify-center w-[100%] bg-primary rounded-[5px]`}
                                 >
                                     <h1 className="text-[#fff] text-[18px] font-[600]">
                                         Checkout Now (USD${totalPrice})
@@ -117,12 +123,13 @@ export const Cart = ({setOpenCart}) => {
     );
 };
 
-const CartSingle = ({ data, cart, quantityChangeHandler, removeFromCartHandler }) => {
+const CartSingle = ({ data, cart, quantityChangeHandler }) => {
     const [value, setValue] = useState(data.qty);
-    const totalPrice = data.discountPrice * value;
+    const totalPrice = data.price * value;
+    const dispatch = useDispatch();
 
     const increment = (data) => {
-        if (data.stock < value) {
+        if (data.quantity < value) {
             toast.error("Product stock limited!");
         } else {
             setValue(value + 1);
@@ -132,30 +139,40 @@ const CartSingle = ({ data, cart, quantityChangeHandler, removeFromCartHandler }
     };
 
     const decrement = (data) => {
-        setValue(value === 1 ? 1 : value - 1);
-        const updateCartData = { ...data, qty: value === 1 ? 1 : value - 1 };
-        quantityChangeHandler(updateCartData);
+        if (value > 1) {
+            setValue(value - 1);
+            const updateCartData = {...data, qty: value - 1 };
+            dispatch(decreaseQuantity(updateCartData));
+        }
     };
 
     const productInCart = cart.find(item => item.id === data.id);
 
+    const removeFromCartHandler = (data) => {
+        dispatch(removeFromCart(data));
+
+        // Update local storage
+        const updatedCart = cart.filter(item => item.id !== data.id);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+    };
+
 
     return (
         <div className="border-b p-4">
-            <div className="w-full flex items-center">
+            <div className="w-full flex items-center relative">
                 <div>
                     <div
-                        className={`bg-[#e44343] border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.normalFlex} justify-center cursor-pointer`}
+                        className={`bg-primary border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.normalFlex} justify-center cursor-pointer`}
                         onClick={() => increment(data)}
                     >
-                        <HiPlus size={18} color="#fff" />
+                        <HiPlus size={18} color="#fff"/>
                     </div>
                     <span className="pl-[10px]">{data.qty}</span>
                     <div
                         className="bg-[#a7abb14f] rounded-full w-[25px] h-[25px] flex items-center justify-center cursor-pointer"
                         onClick={() => decrement(data)}
                     >
-                        <HiOutlineMinus size={16} color="#7d879c" />
+                        <HiOutlineMinus size={16} color="#7d879c"/>
                     </div>
                 </div>
                 <img
@@ -166,16 +183,18 @@ const CartSingle = ({ data, cart, quantityChangeHandler, removeFromCartHandler }
                 <div className="pl-[5px]">
                     <h1>{data.product_name}</h1>
                     <h4 className="font-[400] text-[15px] text-[#00000082]">
-                        {productInCart ? productInCart.qty : 0}
+                        {productInCart ? productInCart.qty : 0} products in the cart
                     </h4>
-                    <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
+                    <h4 className="font-[600] text-[17px] pt-[3px] text-primary font-Roboto">
                         ${data.price}
                     </h4>
                 </div>
-                <RxCross1
-                    className="cursor-pointer"
-                    onClick={() => removeFromCartHandler(data)}
-                />
+                <div className="absolute top-0 right-0">
+                    <RxCross1
+                        className="cursor-pointer"
+                        onClick={() => removeFromCartHandler(data)}
+                    />
+                </div>
             </div>
         </div>
     );

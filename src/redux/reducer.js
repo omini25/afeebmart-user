@@ -1,5 +1,12 @@
 import { LOGOUT } from './actions/actions.js';
-import { ADD_TO_CART, REMOVE_FROM_CART, LOAD_CART, UPDATE_QUANTITY } from './actions/cartActions.js';
+import {
+    ADD_TO_CART,
+    REMOVE_FROM_CART,
+    LOAD_CART,
+    UPDATE_QUANTITY,
+    decreaseQuantity,
+    DECREASE_QUANTITY
+} from './actions/cartActions.js';
 import { SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './types';
 
 const cartFromLocalStorage = localStorage.getItem('cart')
@@ -52,6 +59,15 @@ const userReducer = (state = initialState, action) => {
                 cart: state.cart.map(product =>
                     product.id === action.payload.product.id
                         ? { ...product, quantity: action.payload.quantity }
+                        : product
+                ),
+            };
+        case DECREASE_QUANTITY:
+            return {
+                ...state,
+                cart: state.cart.map(product =>
+                    product.id === action.payload.product.id
+                        ? { ...product, qty: action.payload.qty }
                         : product
                 ),
             };

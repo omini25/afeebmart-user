@@ -1,7 +1,7 @@
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import {
     ActivationPage,
-    BulkPage,
+    BulkPage, CheckoutPage,
     FAQPage,
     HomePage,
     LoginPage,
@@ -41,6 +41,7 @@ const App = () => {
                     <Route path="/bulk-shop" element={<BulkPage />} />
                     <Route path="/faq" element={<FAQPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
 
                 </Routes>
                 <ToastContainer

@@ -1,9 +1,12 @@
 export const ADD_TO_CART = 'ADD_TO_CART';
 
-export const addToCart = (product) => (dispatch, getState) => {
+export const addToCart = (product, qty = 1) => (dispatch, getState) => {
     dispatch({
         type: 'ADD_TO_CART',
-        payload: product
+        payload: {
+            ...product,
+            qty
+        }
     });
 
     // Save the current state of the cart to local storage
@@ -28,7 +31,14 @@ export const removeFromCart = (productId) => ({
 
 export const UPDATE_QUANTITY = 'UPDATE_QUANTITY';
 
-export const updateQuantity = (product, quantity) => ({
+export const updateQuantity = (product) => ({
     type: UPDATE_QUANTITY,
-    payload: { product, quantity },
+    payload: { product, quantity: product.qty + 1 },
+});
+
+export const DECREASE_QUANTITY = 'DECREASE_QUANTITY';
+
+export const decreaseQuantity = (product) => ({
+    type: DECREASE_QUANTITY,
+    payload: { product, quantity: product.qty > 1 ? product.qty - 1 : 1 },
 });
