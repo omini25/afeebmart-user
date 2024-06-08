@@ -2,22 +2,40 @@ import { LOGOUT } from './actions/actions.js';
 import { ADD_TO_CART, REMOVE_FROM_CART, LOAD_CART, UPDATE_QUANTITY } from './actions/cartActions.js';
 import { SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './types';
 
+const cartFromLocalStorage = localStorage.getItem('cart')
+    ? JSON.parse(localStorage.getItem('cart'))
+    : [];
+
+
+
+
 const initialState = {
     loading: false,
     user: null,
     isLoggedIn: false,
     accessToken: null,
     error: null,
-    cart: []
+    cart: cartFromLocalStorage
 };
+
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TO_CART:
-            return {
-                ...state,
-                cart: [...state.cart, action.payload]
-            };
+            const item = action.payload;
+            const existItem = state.cart.find(x => x.id === item.id);
+
+            if (existItem) {
+                return {
+                    ...state,
+                    cart: state.cart.map(x => x.id === existItem.id ? { ...x, qty: x.qty + 1 } : x)
+                };
+            } else {
+                return {
+                    ...state,
+                    cart: [...state.cart, item]
+                };
+            }
         case REMOVE_FROM_CART:
             return {
                 ...state,

@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {addToCart, loadCart, removeFromCart} from "../../redux/actions/cartActions.js";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from 'uuid';
 
 
 export const Cart = ({setOpenCart}) => {
@@ -16,10 +17,19 @@ export const Cart = ({setOpenCart}) => {
     };
 
     let cart = useSelector(state => state.cart || []);
+
     const totalPrice = Array.isArray(cart) ? cart.reduce(
-        (acc, item) => acc + item.qty * item.discountPrice,
+        (acc, item) => {
+            console.log(`Item: ${JSON.stringify(item)}`);
+            console.log(`Quantity: ${item.qty}`);
+            console.log(`Price: ${item.price}`);
+            return acc + (typeof item.qty === 'number' && typeof item.price === 'number' ? item.qty * item.price : 0);
+        },
         0
     ) : 0;
+
+
+
 
     const quantityChangeHandler = (data) => {
         dispatch(addToCart(data));
@@ -43,7 +53,7 @@ export const Cart = ({setOpenCart}) => {
 
     return (
         <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
-            <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[25%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
+            <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[40%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
                 {cart.length === 0 ? (
                     <div className="w-full h-screen flex items-center justify-center">
                         <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
@@ -78,8 +88,9 @@ export const Cart = ({setOpenCart}) => {
                             <div className="w-full border-t">
                                 {Array.isArray(cart) && cart.map(item => (
                                     <CartSingle
-                                        key={item.id} // assuming each item has a unique id
+                                        key={uuidv4()} // generate a new UUID for each item
                                         data={item}
+                                        cart={cart}
                                         quantityChangeHandler={quantityChangeHandler}
                                         removeFromCartHandler={removeFromCartHandler}
                                     />
@@ -106,7 +117,7 @@ export const Cart = ({setOpenCart}) => {
     );
 };
 
-const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
+const CartSingle = ({ data, cart, quantityChangeHandler, removeFromCartHandler }) => {
     const [value, setValue] = useState(data.qty);
     const totalPrice = data.discountPrice * value;
 
@@ -125,6 +136,9 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
         const updateCartData = { ...data, qty: value === 1 ? 1 : value - 1 };
         quantityChangeHandler(updateCartData);
     };
+
+    const productInCart = cart.find(item => item.id === data.id);
+
 
     return (
         <div className="border-b p-4">
@@ -152,10 +166,10 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
                 <div className="pl-[5px]">
                     <h1>{data.product_name}</h1>
                     <h4 className="font-[400] text-[15px] text-[#00000082]">
-                        ${data.discountPrice} * {value}
+                        {productInCart ? productInCart.qty : 0}
                     </h4>
                     <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
-                        US${totalPrice}
+                        ${data.price}
                     </h4>
                 </div>
                 <RxCross1

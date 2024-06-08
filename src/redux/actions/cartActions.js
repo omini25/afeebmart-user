@@ -1,10 +1,14 @@
 export const ADD_TO_CART = 'ADD_TO_CART';
 
-export const addToCart = (product) => {
-    return {
+export const addToCart = (product) => (dispatch, getState) => {
+    dispatch({
         type: 'ADD_TO_CART',
         payload: product
-    };
+    });
+
+    // Save the current state of the cart to local storage
+    const state = getState();
+    localStorage.setItem('cart', JSON.stringify(state.cart));
 };
 
 export const LOAD_CART = 'LOAD_CART';

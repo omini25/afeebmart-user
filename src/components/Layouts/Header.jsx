@@ -25,6 +25,7 @@ export const Header = ({activeHeading}) => {
     const [openCart, setOpenCart] = useState(false);
     const [openWishlist, setOpenWishlist] = useState(false);
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cart = useSelector((state) => state.cart);
     const [open, setOpen] = useState(false);
 
 
@@ -173,7 +174,7 @@ export const Header = ({activeHeading}) => {
                                 <AiOutlineShoppingCart size={30} color="text-black"/>
                                 <span
                                     className="absolute right-0 top-0 rounded-full bg-white w-4 h-4 p-0 m-0 text-secondary font-mono text-[12px] leading-tight text-center">
-                                    {cartItems && cartItems.cartItems ? cartItems.cartItems.length : 0}
+                                    {cart && cart.length ? cart.length : 0}
                                 </span>
                             </div>
                         </div>
