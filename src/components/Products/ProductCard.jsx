@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { addToCart } from "../../redux/actions/cartActions.js";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Ratings from "./Raitings.jsx";
 
 
 export const ProductCard = ({data}) => {
@@ -49,28 +50,29 @@ export const ProductCard = ({data}) => {
                     </h4>
                 </Link>
                 <div className="flex">
-                    <AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>
-                    <AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>
-                    <AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>
-                    <AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>
-                    <AiOutlineStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>
+                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
+                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
+                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
+                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
+                    {/*<AiOutlineStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
+                    <Ratings data={data}/>
                 </div>
 
                 <div className={`py-2 flex items-center jsutify-between`}>
                     $
-                    <span className="font-[400] text-[17px] text-primary">
-                        {data.price}
-                    </span>
+                    <h2 className="font-[400] text-[17px] text-primary">
+                         {data.price}
+                    </h2>
                     <div className={`flex`}>
-                        <h5 className={`${styles.productDiscountPrice}`}>
+                        {/*<h5 className={`${styles.productDiscountPrice}`}>*/}
 
-                            {data.price === 0
-                                ? data.price : data.discount
-                            }
-                        </h5>
-                        <h4 className={`${styles.price}`}>
-                            {data.price ? data.price + "$" : null}
-                        </h4>
+                        {/*    {data.price === 0*/}
+                        {/*        ? data.price : data.discount*/}
+                        {/*    }*/}
+                        {/*</h5>*/}
+                        {/*<h4 className={`${styles.price}`}>*/}
+                        {/*    {data.price ? data.price + "$" : null}*/}
+                        {/*</h4>*/}
                     </div>
                 </div>
 

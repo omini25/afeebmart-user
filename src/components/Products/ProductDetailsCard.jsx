@@ -10,11 +10,12 @@ export const ProductDetailsCard = ({setOpen, data}) => {
     const [click, setClick] = useState(false);
     const [count, setCount] = useState(1);
     const [select, setSelect] = useState(false);
+    const dispatch = useDispatch();
 
-    const handleAddToCart = () => {
-        dispatch(addToCart(data));
-        toast.success("Product added to cart!");
-    };
+    // const handleAddToCart = () => {
+    //     dispatch(addToCart(data));
+    //     toast.success("Product added to cart!");
+    // };
 
     const handleMessageSubmit = () => {
 
@@ -25,6 +26,12 @@ export const ProductDetailsCard = ({setOpen, data}) => {
             setCount(count - 1);
         }
     }
+
+    const handleAddToCart = () => {
+        // Pass the count as a quantity to the addToCart action
+        dispatch(addToCart(data, count));
+        toast.success("Product added to cart!");
+    };
 
     const incrementCount = () => {
         if (count < data.quantity) {
@@ -55,9 +62,9 @@ export const ProductDetailsCard = ({setOpen, data}) => {
                                                 <h3 className={`${styles.shop_name}`}>
                                                     {data.store_name}
                                                 </h3>
-                                                <h5 className="pb-3 text-[15px]">
-                                                    4.2 / Ratings
-                                                </h5>
+                                                {/*<h5 className="pb-3 text-[15px]">*/}
+                                                {/*    4.2 / Ratings*/}
+                                                {/*</h5>*/}
                                             </div>
                                         </div>
                                         <div className={`${styles.button} bg-black mt-4 rounded h-11`}
@@ -66,9 +73,9 @@ export const ProductDetailsCard = ({setOpen, data}) => {
                                                     Send Message <AiOutlineMessage className="ml-1"/>
                                                 </span>
                                         </div>
-                                        <h5 style={{color: data.quantity === 0 ? 'red' : 'black'}}>
-                                            {data.quantity === 0 ? 'Out of stock' : `${data.quantity} in stock`}
-                                        </h5>
+                                        {/*<h5 style={{color: data.quantity === 0 ? 'red' : 'black'}}>*/}
+                                        {/*    {data.quantity === 0 ? 'Out of stock' : `${data.quantity} in stock`}*/}
+                                        {/*</h5>*/}
                                     </div>
 
                                     <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
@@ -79,11 +86,11 @@ export const ProductDetailsCard = ({setOpen, data}) => {
 
                                         <div className="flex pt-3">
                                             <h4 className={`${styles.productDiscountPrice}`}>
-                                                {data.discount ? data.discount : null}
+                                                $ {data.price ? data.price : null}
                                             </h4>
-                                            <h3 className={`${styles.price}`}>
-                                                {data.price ? data.price + "$" : null}
-                                            </h3>
+                                            {/*<h3 className={`${styles.price}`}>*/}
+                                            {/*    {data.price ? data.price + "$" : null}*/}
+                                            {/*</h3>*/}
                                         </div>
 
                                         <div className="flex items-center mt-12 justify-between pr-3">
@@ -125,9 +132,9 @@ export const ProductDetailsCard = ({setOpen, data}) => {
                                             className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center`}
                                             onClick={handleAddToCart}
                                         >
-                                          <span className="text-[#fff] flex items-center">
-                                            Add to cart <AiOutlineShoppingCart className="ml-1"/>
-                                          </span>
+                                            <span className="text-[#fff] flex items-center">
+                                                Add to cart <AiOutlineShoppingCart className="ml-1"/>
+                                            </span>
                                         </div>
                                     </div>
 

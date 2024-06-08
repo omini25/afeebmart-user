@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsStarHalf } from "react-icons/bs";
+import {server} from "../../server.js";
 
-const Ratings = ({ rating }) => {
+const Ratings = ({ productId }) => {
+    const [rating, setRating] = useState(0);
+
+    useEffect(() => {
+        // Replace with your actual API endpoint
+        fetch(`${server}/review/${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                const totalRating = data.reduce((total, rating) => total + rating, 0);
+                setRating(totalRating / data.length);
+            })
+            .catch(error => console.error(error));
+    }, [productId]);
+
     const stars = [];
 
     for (let i = 1; i <= 5; i++) {
@@ -35,6 +49,7 @@ const Ratings = ({ rating }) => {
             );
         }
     }
+
     return <div className="flex"> {stars}</div>;
 };
 
