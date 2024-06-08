@@ -50,11 +50,6 @@ export const ProductCard = ({data}) => {
                     </h4>
                 </Link>
                 <div className="flex">
-                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
-                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
-                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
-                    {/*<AiFillStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
-                    {/*<AiOutlineStar size={20} className="mr-2 cursor-pointer" style={{color: '#F6BA00'}}/>*/}
                     <Ratings data={data}/>
                 </div>
 

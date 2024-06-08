@@ -5,15 +5,19 @@ import {data} from "autoprefixer";
 import {AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineShoppingCart} from "react-icons/ai";
 import {addToCart} from "../../redux/actions/cartActions.js";
 import {toast} from "react-toastify";
+import Ratings from "./Raitings.jsx";
+import {useDispatch} from "react-redux";
 
 export const ProductDetails = ({product}) => {
     const [click, setClick] = useState(false);
     const navigate = useNavigate();
     const [count, setCount] = useState(1);
     const [select, setSelect] = useState(0);
+    const dispatch = useDispatch();
 
     const handleAddToCart = () => {
-        dispatch(addToCart(data));
+        // Pass the count as a quantity to the addToCart action
+        dispatch(addToCart(product.product, count));
         toast.success("Product added to cart!");
     };
 
@@ -81,15 +85,15 @@ export const ProductDetails = ({product}) => {
                                         <p>
                                             {product.product.description}
                                         </p>
-                                        <div className="flex pt-3">
+                                        <div className="flex pt-3 mb-5">
                                             <h2 className={`${styles.productDiscountPrice}`}>
                                                 ${product.product.price}
                                             </h2>
-                                            <h4 className={`${styles.price}`}>
-                                                ${product.product.discount ? product.product.discount + "$" : null}
-                                            </h4>
+                                            {/*<h4 className={`${styles.price}`}>*/}
+                                            {/*    ${product.product.discount ? product.product.discount + "$" : null}*/}
+                                            {/*</h4>*/}
 
-                                            <div className="flex items-center mt-12 justify-between">
+                                            <div className="flex items-center mt-12 justify-between pt-8">
                                                 <div>
                                                     <button
                                                         className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
@@ -124,6 +128,8 @@ export const ProductDetails = ({product}) => {
                                                         />
                                                     )}
                                                 </div>
+
+
                                             </div>
 
                                         </div>
@@ -131,20 +137,22 @@ export const ProductDetails = ({product}) => {
                                             className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center`}
                                             onClick={handleAddToCart}
                                         >
-                                          <span className="text-[#fff] flex items-center">
-                                            Add to cart <AiOutlineShoppingCart className="ml-1"/>
-                                          </span>
+                                            <span className="text-[#fff] flex items-center">
+                                                Add to cart <AiOutlineShoppingCart className="ml-1"/>
+                                            </span>
                                         </div>
 
                                         <div className={`flex items-center pt-8`}>
                                             <img src={product.image} alt=""
-                                            className={`w-[50px] h-[50px] rounded-full mr-2`}/>
+                                                 className={`w-[50px] h-[50px] rounded-full mr-2`}/>
 
                                             <h3 className={`${styles.shop_name} pb-1 pt-1`}>
                                                 {product.product.store_name}
                                             </h3>
                                             <h5 className="pb-3 text-[15px]">
-                                                {product.ratings} Ratings
+
+                                                <Ratings rating={product.product.id}/>
+
                                             </h5>
 
                                         </div>
@@ -158,10 +166,10 @@ export const ProductDetails = ({product}) => {
 
                                 </div>
                             </div>
-                                <ProductDetailsInfo product={product}/>
+                            <ProductDetailsInfo product={product.product}/>
 
-                            <br />
-                            <br />
+                            <br/>
+                            <br/>
                         </div>
                     ) : null
                 }
@@ -202,105 +210,103 @@ const ProductDetailsInfo = ({product}) => {
                         <div className={`${styles.active_indicator}`}/>
                     ) : null}
                 </div>
-                <div className="relative">
-                    <h5
-                        className={
-                            "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
-                        }
-                        onClick={() => setActive(3)}
-                    >
-                        Seller Information
-                    </h5>
-                    {active === 3 ? (
-                        <div className={`${styles.active_indicator}`}/>
-                    ) : null}
-                </div>
+                {/*<div className="relative">*/}
+                {/*    <h5*/}
+                {/*        className={*/}
+                {/*            "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"*/}
+                {/*        }*/}
+                {/*        onClick={() => setActive(3)}*/}
+                {/*    >*/}
+                {/*        Seller Information*/}
+                {/*    </h5>*/}
+                {/*    {active === 3 ? (*/}
+                {/*        <div className={`${styles.active_indicator}`}/>*/}
+                {/*    ) : null}*/}
+                {/*</div>*/}
             </div>
             {active === 1 ? (
                 <>
                     <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-                        {product.product.description}
+                        {product.description}
                     </p>
                 </>
             ) : null}
 
-            {active === 2 ? (
-                <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
-                    {data &&
-                        data.reviews.map((item, index) => (
-                            <div className="w-full flex my-2">
-                                <img
-                                    src={`${item.user.avatar?.url}`}
-                                    alt=""
-                                    className="w-[50px] h-[50px] rounded-full"
-                                />
+                {active === 2 ? (
+                    <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
+                        {product && product.reviews && product.reviews.map((item, index) => (
+                            <div className="w-full flex my-2" key={index}>
                                 <div className="pl-2 ">
                                     <div className="w-full flex items-center">
                                         <h1 className="font-[500] mr-3">{item.user.name}</h1>
-                                        <Ratings rating={data?.ratings} />
+                                        <Ratings rating={product.id} />
                                     </div>
                                     <p>{item.comment}</p>
                                 </div>
                             </div>
-                        ))}
+                    ))}
 
                     <div className="w-full flex justify-center">
-                        {data && data.reviews.length === 0 && (
+                        {product && product.reviews && product.reviews.length === 0 && (
                             <h5>No Reviews have for this product!</h5>
                         )}
                     </div>
                 </div>
             ) : null}
 
-            {active === 3 && (
-                <div className="w-full block 800px:flex p-5">
-                    <div className="w-full 800px:w-[50%]">
-                        <Link to={`/shop/preview/${data.shop._id}`}>
-                            <div className="flex items-center">
-                                <img
-                                    src={`${data?.shop?.avatar?.url}`}
-                                    className="w-[50px] h-[50px] rounded-full"
-                                    alt=""
-                                />
-                                <div className="pl-3">
-                                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                                    <h5 className="pb-2 text-[15px]">
-                                        ({averageRating}/5) Ratings
-                                    </h5>
-                                </div>
-                            </div>
-                        </Link>
-                        <p className="pt-2">{data.shop.description}</p>
-                    </div>
-                    <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
-                        <div className="text-left">
-                            <h5 className="font-[600]">
-                                Joined on:{" "}
-                                <span className="font-[500]">
-                                  {data.shop?.createdAt?.slice(0, 10)}
-                                </span>
-                                            </h5>
-                                            <h5 className="font-[600] pt-3">
-                                                Total Products:{" "}
-                                                <span className="font-[500]">
-                                  {products && products.length}
-                                </span>
-                            </h5>
-                            <h5 className="font-[600] pt-3">
-                                Total Reviews:{" "}
-                                <span className="font-[500]">{totalReviewsLength}</span>
-                            </h5>
-                            <Link to="/">
-                                <div
-                                    className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
-                                >
-                                    <h4 className="text-white">Visit Shop</h4>
-                                </div>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/*{active === 3 && (*/}
+            {/*    <div className="w-full block 800px:flex p-5">*/}
+            {/*        <div className="w-full 800px:w-[50%]">*/}
+            {/*            <Link to={`/shop/preview/${product.store_name}`}>*/}
+            {/*                <div className="flex items-center">*/}
+            {/*                    <img*/}
+            {/*                        src={`${product.image}`}*/}
+            {/*                        className="w-[50px] h-[50px] rounded-full"*/}
+            {/*                        alt=""*/}
+            {/*                    />*/}
+            {/*                    <div className="pl-3">*/}
+            {/*                        <h3 className={`${styles.shop_name}`}>{product.store_name}</h3>*/}
+            {/*                        /!*<h5 className="pb-2 text-[15px]">*!/*/}
+            {/*                        /!*    ({averageRating}/5) Ratings*!/*/}
+            {/*                        /!*</h5>*!/*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*            </Link>*/}
+            {/*            /!*<p className="pt-2">{data.shop.description}</p>*!/*/}
+            {/*        </div>*/}
+            {/*        <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">*/}
+            {/*            <div className="text-left">*/}
+            {/*                /!*<h5 className="font-[600]">*!/*/}
+            {/*                /!*    Joined on:{" "}*!/*/}
+            {/*                /!*    <span className="font-[500]">*!/*/}
+            {/*                /!*      {data.shop?.createdAt?.slice(0, 10)}*!/*/}
+            {/*                /!*    </span>*!/*/}
+            {/*                /!*                </h5>*!/*/}
+            {/*                /!*                <h5 className="font-[600] pt-3">*!/*/}
+            {/*                /!*                    Total Products:{" "}*!/*/}
+            {/*                /!*                    <span className="font-[500]">*!/*/}
+            {/*                /!*      {products && products.length}*!/*/}
+            {/*                /!*    </span>*!/*/}
+            {/*                /!*</h5>*!/*/}
+            {/*                <h5 className="font-[600] pt-3">*/}
+            {/*                    Total Reviews:{" "}*/}
+            {/*                    <span className="font-[500]">{totalReviewsLength}</span>*/}
+            {/*                </h5>*/}
+            {/*                <Link to="/">*/}
+            {/*                    <div*/}
+            {/*                        className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}*/}
+            {/*                    >*/}
+            {/*                        <h4 className="text-white">Visit Shop</h4>*/}
+            {/*                    </div>*/}
+            {/*                </Link>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*)}*/}
         </div>
     )
 }
+
+
+
+

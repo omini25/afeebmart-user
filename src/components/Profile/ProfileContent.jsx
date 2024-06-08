@@ -21,16 +21,18 @@ export const ProfileContent = ({active}) => {
     const [avatar, setAvatar] = useState(null);
 
     // Get user data from Redux store
-    const userData = useSelector(state => state.user);
+    const userData = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
         if (userData) {
-            setName(userData.name);
-            setEmail(userData.email);
-            setPhoneNumber(userData.phone);
-            setAvatar(userData.image);
+            setName(userData.user.name);
+            setEmail(userData.user.email);
+            setPhoneNumber(userData.user.phone);
+            setAvatar(userData.user.image);
         }
     }, [userData]);
+
+
 
 
     return (
@@ -159,14 +161,14 @@ export const ProfileContent = ({active}) => {
 
 const AllOrders = () => {
     const [orders, setOrders] = useState([]);
-    const userId = useSelector(state => state.user.user.id);
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const userId = userData ? userData.user.id : null;
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(`${server}/order/${userId}`);
                 setOrders(response.data.orders); // Update this line
-                console.log(response.data.orders); // Update this line
             } catch (error) {
                 console.error('Failed to fetch orders:', error);
             }
@@ -256,7 +258,8 @@ const AllOrders = () => {
 
 const AllRefundOrders = () => {
     const [orders, setOrders] = useState([]);
-    const userId = useSelector(state => state.user.user.id);
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const userId = userData ? userData.user.id : null;
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -352,7 +355,8 @@ const AllRefundOrders = () => {
 
 const TrackOrder = () => {
     const [orders, setOrders] = useState([]);
-    const userId = useSelector(state => state.user.user.id);
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const userId = userData ? userData.user.id : null;
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -447,7 +451,8 @@ const TrackOrder = () => {
 const Address = () => {
     const [open, setOpen] = useState(false);
     const [address, setAddress] = useState(null);
-    const { user } = useSelector((state) => state.user);
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const userId = userData ? userData.user.id : null;
     const dispatch = useDispatch();
     const [country, setCountry] = useState("");
     const [city, setCity] = useState("");
@@ -460,16 +465,15 @@ const Address = () => {
     useEffect(() => {
         const fetchAddress = async () => {
             try {
-                const response = await axios.get(`${server}/address/${user.id}`);
+                const response = await axios.get(`${server}/address/${userId}`);
                 setAddress(response.data.address); // Update this line
-                console.log(response.data.address); // Update this line
             } catch (error) {
                 console.error('Failed to fetch address:', error);
             }
         };
 
         fetchAddress();
-    }, [user.id]);
+    }, [userData.user.id]);
 
     return (
         <div className="w-full px-5">

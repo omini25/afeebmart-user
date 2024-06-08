@@ -4,23 +4,25 @@ import ProductCard from "./ProductCard.jsx";
 import styles from "../../styles/styles.js";
 import {server} from "../../server.js";
 
-export const SuggestProducts = (product) => {
+export const SuggestProducts = ({ vendorId }) => {
     const [products, setProducts] = useState(null);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${server}/products`);
-                setProducts(response.data.products);
+                console.log('vendorId:', vendorId);
+                console.log('Product vendor_ids:', response.data.products.map(product => product.vendor_id));
+                const filteredProducts = response.data.products.filter(product => product.vendor_id === vendorId);
+                console.log('Filtered products:', filteredProducts);
+                setProducts(filteredProducts);
             } catch (error) {
                 console.error('Failed to fetch products:', error);
             }
         };
 
         fetchProducts();
-    }, []);
-
-
+    }, [vendorId]);
 
     return (
         <>

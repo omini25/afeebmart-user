@@ -9,17 +9,16 @@ import {toast} from "react-toastify";
 
 export const ProfilePage = () => {
     const [active, setActive] = useState(1);
-    const user = useSelector(state => state.user); // Access the user state from the Redux store
+    const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn')); // Access the isLoggedIn state from the local storage // Access the isLoggedIn state from the Redux store
     const navigate = useNavigate(); // Hook from react-router-dom for navigation
 
     // Redirect to login page if user is not logged in
     useEffect(() => {
-        const user = localStorage.getItem('user');
-        if (!user) {
+        if (!isLoggedIn) {
             toast.error('Please login to access profile page.');
             navigate('/login');
         }
-    }, [navigate]);
+    }, [isLoggedIn, navigate]);
 
     return (
         <>

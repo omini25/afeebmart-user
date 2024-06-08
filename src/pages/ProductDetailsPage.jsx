@@ -24,13 +24,12 @@ export const ProductDetailsPage = () => {
 
 
 
-
     return (
         <>
             <Header />
             {product && <ProductDetails product={product} />}
             {
-                product && <SuggestProducts category={product.category} />
+                product && <SuggestProducts vendorId={product.product.vendor_id} />
             }
             <Footer />
         </>

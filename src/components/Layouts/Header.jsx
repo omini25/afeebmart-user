@@ -27,6 +27,8 @@ export const Header = ({activeHeading}) => {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
     const cart = useSelector((state) => state.cart);
     const [open, setOpen] = useState(false);
+    const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn'));
+    const userData = JSON.parse(localStorage.getItem('user'));
 
 
     useEffect(() => {
@@ -181,10 +183,10 @@ export const Header = ({activeHeading}) => {
 
                         <div className={`${styles.normalFlex}`}>
                             <div className={`relative cursor-pointer mr-[15px]`}>
-                                {user && user.user ? (
+                                {isLoggedIn && userData ? (
                                     <Link to={`/profile`}>
-                                        <img src={`http://localhost:8000/images/users/${user.user.image}`}
-                                             alt={user.user.name}
+                                        <img src={`${server}/images/users/${userData.user.image}`}
+                                             alt={userData.user.name}
                                              className="w-[35px] h-[35px] rounded-full"/>
                                         {/*<span>{user.user.name}</span>*/}
                                     </Link>
@@ -316,11 +318,11 @@ export const Header = ({activeHeading}) => {
                             <br />
 
                             <div className="flex w-full justify-center">
-                                {user && user.user ? (
+                                {isLoggedIn && userData ? (
                                     <div>
                                         <Link to="/profile">
                                             <img
-                                                src={`http://localhost:8000/images/users/${user.user.image}`}
+                                                src={`${server}/images/users/${userData.user.image}`}
                                                 alt=""
                                                 className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
                                             />

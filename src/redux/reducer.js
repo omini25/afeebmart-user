@@ -13,7 +13,9 @@ const cartFromLocalStorage = localStorage.getItem('cart')
     ? JSON.parse(localStorage.getItem('cart'))
     : [];
 
-
+const isLoggedInFromLocalStorage = localStorage.getItem('isLoggedIn')
+    ? JSON.parse(localStorage.getItem('isLoggedIn'))
+    : false;
 
 
 const initialState = {
@@ -81,7 +83,7 @@ const userReducer = (state = initialState, action) => {
             return { ...state, loading: true, error: null };
         case SIGNUP_SUCCESS:
         case LOGIN_SUCCESS:
-            return { ...state, loading: false, user: action.payload.user, accessToken: action.payload.access_token, isLoggedIn: true };
+            return { ...state, loading: false, user: action.payload.user, accessToken: action.payload.access_token,  isLoggedIn: isLoggedInFromLocalStorage };
         case SIGNUP_FAILURE:
         case LOGIN_FAILURE:
             return { ...state, loading: false, error: action.payload, isLoggedIn: false };

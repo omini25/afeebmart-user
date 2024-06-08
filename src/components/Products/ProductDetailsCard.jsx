@@ -5,6 +5,7 @@ import {AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineShoppingCart} fr
 import {useDispatch} from 'react-redux';
 import { addToCart } from '../../redux/actions/cartActions';
 import { toast } from 'react-toastify';
+import Ratings from "./Raitings.jsx";
 
 export const ProductDetailsCard = ({setOpen, data}) => {
     const [click, setClick] = useState(false);
@@ -92,6 +93,11 @@ export const ProductDetailsCard = ({setOpen, data}) => {
                                             {/*    {data.price ? data.price + "$" : null}*/}
                                             {/*</h3>*/}
                                         </div>
+
+                                        <div className="mt-2">
+                                            <Ratings productId={data.id} />
+                                        </div>
+
 
                                         <div className="flex items-center mt-12 justify-between pr-3">
                                             <div>
