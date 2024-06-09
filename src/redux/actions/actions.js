@@ -13,7 +13,7 @@ export const signup = (name, email, password) => {
     return async (dispatch) => {
         dispatch({ type: SIGNUP_REQUEST });
         try {
-            const response = await fetch('http://localhost:8000/api/register', {
+            const response = await fetch('https://afreebmart.com/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const login = (email, password) => {
     return async (dispatch) => {
         dispatch({ type: LOGIN_REQUEST });
         try {
-            const response = await fetch('http://localhost:8000/api/login', {
+            const response = await fetch('https://afreebmart.com/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

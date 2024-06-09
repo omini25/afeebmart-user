@@ -10,6 +10,23 @@ import { toast } from "react-toastify";
 
 
 export const Checkout = () => {
+    const { user } = useSelector((state) => state.user);
+    const { cart } = useSelector((state) => state.cart);
+    const [country, setCountry] = useState("");
+    const [city, setCity] = useState("");
+    const [userInfo, setUserInfo] = useState(false);
+    const [address1, setAddress1] = useState("");
+    const [address2, setAddress2] = useState("");
+    const [zipCode, setZipCode] = useState(null);
+    const [couponCode, setCouponCode] = useState("");
+    const [couponCodeData, setCouponCodeData] = useState(null);
+    const [discountPrice, setDiscountPrice] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
 
     if(address1 === "" || address2 === "" || zipCode === null || country === "" || city === ""){
         toast.error("Please choose your delivery address!")

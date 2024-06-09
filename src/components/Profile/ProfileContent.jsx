@@ -44,7 +44,7 @@ export const ProfileContent = ({active}) => {
                         <div className="flex justify-center w-full">
                             <div className="relative">
                                 <img
-                                    src={`http://localhost:8000/images/users/${avatar}`}
+                                    src={`${server}/images/users/${avatar}`}
                                     className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
                                     alt=""
                                 />

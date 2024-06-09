@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import Login from "../components/Login.jsx";
 
 export const LoginPage = () => {
-    const isLoggedIn = useSelector(state => state.isLoggedIn);
+    const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn'));
     const navigate = useNavigate();
 
     useEffect(() => {

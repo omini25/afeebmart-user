@@ -15,6 +15,7 @@ import { addToCart } from "../../redux/actions/cartActions.js";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Ratings from "./Raitings.jsx";
+import WishlistButton from "../Layouts/WishlistButton.jsx";
 
 
 export const ProductCard = ({data}) => {
@@ -73,19 +74,21 @@ export const ProductCard = ({data}) => {
 
                 {/* side options */}
                 <div>
-                    {click ? (
-                        <AiFillHeart size={22} className="cursor-pointer absolute right-2 top-5"
-                                     onClick={() => setClick(!click)}
-                                     color={click ? "red" : "#333"}
-                                     title="Remove from wishlist"
-                        />
-                    ) : (
-                        <AiOutlineHeart size={22} className="cursor-pointer absolute right-2 top-5"
-                                        onClick={() => setClick(!click)}
-                                        color={click ? "red" : "#333"}
-                                        title="Add to wishlist"
-                        />
-                    )}
+                    {/*{click ? (*/}
+                    {/*    <AiFillHeart size={22} className="cursor-pointer absolute right-2 top-5"*/}
+                    {/*                 onClick={() => setClick(!click)}*/}
+                    {/*                 color={click ? "red" : "#333"}*/}
+                    {/*                 title="Remove from wishlist"*/}
+                    {/*    />*/}
+                    {/*) : (*/}
+                    {/*    <AiOutlineHeart size={22} className="cursor-pointer absolute right-2 top-5"*/}
+                    {/*                    onClick={() => setClick(!click)}*/}
+                    {/*                    color={click ? "red" : "#333"}*/}
+                    {/*                    title="Add to wishlist"*/}
+                    {/*    />*/}
+                    {/*)}*/}
+                    <WishlistButton productId={data.id} />
+
                     <AiOutlineEye size={22} className="cursor-pointer absolute right-2 top-14"
                                   onClick={() => setOpen(!open)}
                                   color="#333"

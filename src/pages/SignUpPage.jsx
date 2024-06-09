@@ -5,15 +5,15 @@ import { toast } from 'react-toastify';
 import SignUp from "../components/SignUp.jsx";
 
 export const SignUpPage = () => {
-    const user = useSelector(state => state.user);
+    const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn'));
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user) {
+        if (isLoggedIn) {
             toast.error('You are already logged in and cannot access this page.');
-            navigate('/'); // Redirect to home page or any other page
+            navigate('/'); // Redirect to home page
         }
-    }, [user, navigate]);
+    }, [isLoggedIn, navigate]);
 
     return (
         <>
