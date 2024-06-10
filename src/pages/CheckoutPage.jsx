@@ -8,7 +8,7 @@ import {toast} from "react-toastify";
 
 export const CheckoutPage = () => {
     const location = useLocation();
-    const cartDetails = location.state ? location.state.cartDetails : {};
+    const cartDetails = JSON.parse(localStorage.getItem('cart')) || {};
 
     const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn')); // Access the isLoggedIn state from the local storage // Access the isLoggedIn state from the Redux store
     const navigate = useNavigate(); // Hook from react-router-dom for navigation
